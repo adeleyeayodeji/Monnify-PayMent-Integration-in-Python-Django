@@ -1,0 +1,46 @@
+<script type="text/javascript">
+  function payWithMonnify(
+    amount,
+    customerName,
+    customerEmail,
+    customerMobileNumber
+  ) {
+    MonnifySDK.initialize({
+      amount,
+      currency: "NGN",
+      reference: "" + Math.floor(Math.random() * 1000000000 + 1),
+      customerName,
+      customerEmail,
+      customerMobileNumber,
+      apiKey: "{{mk_public}}", //Your api key
+      contractCode: "{{contract}}", //Your contract code
+      paymentDescription: "Payment of Product",
+      isTestMode: true, //True or False for testmode
+      paymentMethods: ["CARD", "ACCOUNT_TRANSFER"],
+      onComplete: function (response) {
+        //Implement what happens when transaction is completed.
+        console.log(response);
+        document.querySelector(".alert").style.display = "block";
+        document.querySelector("form").reset();
+      },
+      onClose: function (data) {
+        //Implement what should happen when the modal is closed here
+        console.log(data);
+      }
+    });
+  }
+
+  $(function () {
+    $("form").submit(function (e) {
+      e.preventDefault();
+      let data = $(this).serializeArray();
+      // console.log(data);
+      let amount = data[1].value,
+        customerName = data[0].value,
+        customerEmail = data[2].value,
+        customerMobileNumber = data[3].value;
+      // console.log(data[0].value);
+      payWithMonnify(amount, customerName, customerEmail, customerMobileNumber);
+    });
+  });
+</script>
